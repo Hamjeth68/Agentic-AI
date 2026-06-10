@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Email {
+  id          String       @id @default(uuid())
+  from        String
+  to          String
+  subject     String
+  messageId   String       @unique
+  receivedAt  DateTime
+  textBody    String?
+  attachments Attachment[]
+  contracts   ContractExtraction[]
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  emailId     String
+  fileName    String
+  mimeType    String
+  storagePath String
+  sizeBytes   Int
+  status      String
+  email       Email    @relation(fields: [emailId], references: [id])
+  contracts   ContractExtraction[]
+}
+
+model ContractExtraction {
+  id           String                @id @default(uuid())
+  emailId      String
+  attachmentId String
+  extraction   Json
+  route        Json
+  createdAt    DateTime              @default(now())
+  email        Email                 @relation(fields: [emailId], references: [id])
+  attachment   Attachment            @relation(fields: [attachmentId], references: [id])
+  ragResults   RagValidationResult[]
+  reviewItems  HumanReviewItem[]
+}
+
+model RagValidationResult {
+  id         String             @id @default(uuid())
+  contractId String
+  validation Json
+  createdAt  DateTime           @default(now())
+  contract   ContractExtraction @relation(fields: [contractId], references: [id])
+}
+
+model HumanReviewItem {
+  id                String             @id @default(uuid())
+  contractId        String
+  status            String
+  recommendedAction String
+  reasons           Json
+  createdAt         DateTime           @default(now())
+  resolvedAt        DateTime?
+  contract          ContractExtraction @relation(fields: [contractId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  entityId  String
+  step      String
+  message   String
+  createdAt DateTime @default(now())
+}

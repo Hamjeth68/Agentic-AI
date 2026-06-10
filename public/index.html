@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contract Intake Review Agent</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Agentic AI Demo</p>
+          <h1>Contract Intake & Compliance Review</h1>
+        </div>
+        <button id="refreshBtn" type="button">Refresh</button>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h2>Run the basic flow</h2>
+          <p>
+            Process sample contract PDFs through email intake, PDF parsing, structured extraction,
+            RAG policy validation, deterministic routing, storage, and human review.
+          </p>
+        </div>
+        <div class="sample-actions">
+          <button data-sample="clean" type="button">Clean Contract</button>
+          <button data-sample="missing" type="button">Missing Fields</button>
+          <button data-sample="risky" type="button">Risky Contract</button>
+        </div>
+      </section>
+
+      <section id="result" class="result empty">
+        <span>Run a sample to see the latest decision.</span>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Processed Contracts</h2>
+            <span id="contractCount">0</span>
+          </div>
+          <div id="contracts" class="list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <h2>Human Review Queue</h2>
+            <span id="reviewCount">0</span>
+          </div>
+          <div id="reviewQueue" class="list"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
